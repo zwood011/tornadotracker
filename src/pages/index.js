@@ -9,6 +9,13 @@ export default function TornadoTracker() {
   const [areaInfo, setAreaInfo] = useState({ county: '', state: '', classOne: '', classTwo: '', timeZone: '' });
   const [areaShow, setAreaShow] = useState(false);
 
+  //! My steps for completing the full baseline to this project:
+  //* Step 1: gather initial baseline material. Find timezones, location info, and names.
+  // Step one finished
+  //* Step 2: Use info gathered in the initial baseline to use in the same, or an external, api to check if a tornado /alert is ACTIVE
+  // Step 2 is active
+  //* Step 3: If active, FIND A WAY TO TRACK IT.. :)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
