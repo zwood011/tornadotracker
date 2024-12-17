@@ -13,7 +13,7 @@ export default function TornadoTracker() {
   //* Step 1: gather initial baseline material. Find timezones, location info, and names.
   // Step one finished
   //* Step 2: Use info gathered in the initial baseline to use in the same, or an external, api to check if a tornado /alert is ACTIVE
-  // Step 2 is active
+  // Step 2 is active, now find whatever tornado alerts are labeled at on the google api site
   //* Step 3: If active, FIND A WAY TO TRACK IT.. :)
 
   const handleSubmit = async (e) => {
@@ -38,12 +38,18 @@ export default function TornadoTracker() {
       // Step 2: Fetch zones data
       const zonesResponse = await axios.post('/api/fetch-zones', { lat, lng });
       setResult(zonesResponse.data);
-      setError(null);
+
+      // Step 3: Fetch alerts data
+      const alertsResponse = await axios.post('/api/alerts', { lat, lng });
+      console.log('Alerts:', alertsResponse.data);
+
+      setError(null); // Clear any existing errors
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Error fetching data');
       setResult(null);
     }
   };
+
 
   useEffect(() => {
     if (result) {
