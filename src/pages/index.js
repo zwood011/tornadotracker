@@ -8,6 +8,12 @@ export default function TornadoTracker() {
   const [error, setError] = useState(null);
   const [areaInfo, setAreaInfo] = useState({ county: '', state: '', classOne: '', classTwo: '', timeZone: '' });
   const [areaShow, setAreaShow] = useState(false);
+  const [tornadoResult, setTornadoResult] = useState(null);
+  const [tornadoAlerts, setTornadoAlerts] = useState({
+    alert0: { certainty: '', headline: '', description: '', severity: '', status: '' },
+    alert1: { certainty: '', headline: '', description: '', severity: '', status: '' },
+    alert2: { certainty: '', headline: '', description: '', severity: '', status: '' }
+  });
 
   //! My steps for completing the full baseline to this project:
   //* Step 1: gather initial baseline material. Find timezones, location info, and names.
@@ -41,7 +47,7 @@ export default function TornadoTracker() {
 
       // Step 3: Fetch alerts data
       const alertsResponse = await axios.post('/api/alerts', { lat, lng });
-      console.log('Alerts:', alertsResponse.data);
+      setTornadoResult(alertsResponse.data);
 
       setError(null); // Clear any existing errors
     } catch (err) {
@@ -50,20 +56,51 @@ export default function TornadoTracker() {
     }
   };
 
-
   useEffect(() => {
     if (result) {
       // Automatically update area info and show it
       setAreaInfo({
-        county: result.features[0]?.properties?.name || '',
-        state: result.features[0]?.properties?.state || '',
-        classOne: result.features[1]?.properties?.name || '',
-        classTwo: result.features[2]?.properties?.name || '',
-        timeZone: result.features[0]?.properties?.timeZone?.[0] || '',
+        county: result.features[0]?.properties?.name || null,
+        state: result.features[0]?.properties?.state || null,
+        classOne: result.features[1]?.properties?.name || null,
+        classTwo: result.features[2]?.properties?.name || null,
+        timeZone: result.features[0]?.properties?.timeZone?.[0] || null,
       });
       setAreaShow(true);
     }
   }, [result]);
+
+  useEffect(() => {
+    if (tornadoResult) {
+      setTornadoAlerts({
+        alert0: {
+          certainty: tornadoResult?.alerts?.[0]?.properties?.certainty || '',
+          headline: tornadoResult?.alerts?.[0]?.properties?.headline || '',
+          description: tornadoResult?.alerts?.[0]?.properties?.description || '',
+          severity: tornadoResult?.alerts?.[0]?.properties?.severity || '',
+          status: tornadoResult?.alerts?.[0]?.properties?.status || '',
+        },
+        alert1: {
+          certainty: tornadoResult?.alerts?.[1]?.properties?.certainty || '',
+          headline: tornadoResult?.alerts?.[1]?.properties?.headline || '',
+          description: tornadoResult?.alerts?.[1]?.properties?.description || '',
+          severity: tornadoResult?.alerts?.[1]?.properties?.severity || '',
+          status: tornadoResult?.alerts?.[1]?.properties?.status || '',
+        },
+        alert2: {
+          certainty: tornadoResult?.alerts?.[2]?.properties?.certainty || '',
+          headline: tornadoResult?.alerts?.[2]?.properties?.headline || '',
+          description: tornadoResult?.alerts?.[2]?.properties?.description || '',
+          severity: tornadoResult?.alerts?.[2]?.properties?.severity || '',
+          status: tornadoResult?.alerts?.[2]?.properties?.status || '',
+        },
+      });
+    }
+  }, [tornadoResult])
+
+  const alertHandler = () => {
+    console.log(tornadoAlerts);
+  }
 
   return (
     <>
@@ -85,6 +122,10 @@ export default function TornadoTracker() {
             </ol>
             <p>(Classes vary by region. If there is <em>no specific classification</em> labeled within the region, they will be marked as the <strong>original county</strong> by default)</p>
           </div>
+        )}
+
+        {tornadoAlerts && (
+          <button onClick={alertHandler}>Show Alerts</button>
         )}
 
         <form onSubmit={handleSubmit} className="main-element">
