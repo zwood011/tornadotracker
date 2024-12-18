@@ -62,15 +62,20 @@ export default function TornadoTracker() {
 
   useEffect(() => {
     if (tornadoResult) {
-      setTornadoAlerts(tornadoResult.alerts?.map(alert => ({
-        certainty: alert?.properties?.certainty || '',
-        headline: alert?.properties?.headline || '',
-        description: alert?.properties?.description || '',
-        severity: alert?.properties?.severity || '',
-        status: alert?.properties?.status || '',
-      })) || []);
+      if (tornadoResult.alerts?.length > 0) {
+        setTornadoAlerts(tornadoResult.alerts.map(alert => ({
+          certainty: alert?.properties?.certainty || null,
+          headline: alert?.properties?.headline || null,
+          description: alert?.properties?.description || null,
+          severity: alert?.properties?.severity || null,
+          status: alert?.properties?.status || null,
+        })));
+      } else {
+        setTornadoAlerts(null);
+      }
     }
   }, [tornadoResult]);
+
 
   return (
     <>
