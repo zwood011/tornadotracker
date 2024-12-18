@@ -18,6 +18,12 @@ export default function TornadoTracker() {
   // Step 2 finished
   //* Step 3: If active, find a way to track the tornado using all the information collected in the states
 
+  /*  The NOAA (National Oceanic and Atmospheric Administration) Weather API provides real-time tornado data including:
+    - Current tornado locations
+    - Storm path predictions
+    - Storm track coordinates
+*/
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
