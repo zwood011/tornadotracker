@@ -19,7 +19,7 @@ export default function TornadoTracker() {
   //* Step 1: gather initial baseline material. Find timezones, location info, and names.
   // Step one finished
   //* Step 2: Use info gathered in the initial baseline to use in the same, or an external, api to check if a tornado /alert is ACTIVE
-  // Step 2 is active, now find whatever tornado alerts are labeled at on the google api site
+  // Step 2 finished
   //* Step 3: If active, FIND A WAY TO TRACK IT.. :)
 
   const handleSubmit = async (e) => {
@@ -72,31 +72,17 @@ export default function TornadoTracker() {
 
   useEffect(() => {
     if (tornadoResult) {
-      setTornadoAlerts({
-        alert0: {
-          certainty: tornadoResult?.alerts?.[0]?.properties?.certainty || '',
-          headline: tornadoResult?.alerts?.[0]?.properties?.headline || '',
-          description: tornadoResult?.alerts?.[0]?.properties?.description || '',
-          severity: tornadoResult?.alerts?.[0]?.properties?.severity || '',
-          status: tornadoResult?.alerts?.[0]?.properties?.status || '',
-        },
-        alert1: {
-          certainty: tornadoResult?.alerts?.[1]?.properties?.certainty || '',
-          headline: tornadoResult?.alerts?.[1]?.properties?.headline || '',
-          description: tornadoResult?.alerts?.[1]?.properties?.description || '',
-          severity: tornadoResult?.alerts?.[1]?.properties?.severity || '',
-          status: tornadoResult?.alerts?.[1]?.properties?.status || '',
-        },
-        alert2: {
-          certainty: tornadoResult?.alerts?.[2]?.properties?.certainty || '',
-          headline: tornadoResult?.alerts?.[2]?.properties?.headline || '',
-          description: tornadoResult?.alerts?.[2]?.properties?.description || '',
-          severity: tornadoResult?.alerts?.[2]?.properties?.severity || '',
-          status: tornadoResult?.alerts?.[2]?.properties?.status || '',
-        },
-      });
+      const alerts = tornadoResult?.alerts?.map((alert) => ({
+        certainty: alert?.properties?.certainty || '',
+        headline: alert?.properties?.headline || '',
+        description: alert?.properties?.description || '',
+        severity: alert?.properties?.severity || '',
+        status: alert?.properties?.status || '',
+      })) || [];
+      setTornadoAlerts(alerts);
     }
-  }, [tornadoResult])
+  }, [tornadoResult]);
+
 
   const alertHandler = () => {
     console.log(tornadoAlerts);
