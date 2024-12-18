@@ -3,22 +3,31 @@ import Head from 'next/head';
 import axios from 'axios';
 
 export default function TornadoTracker() {
+  // Tracks the input for ZIP code
   const [zipCodeInput, setZipCodeInput] = useState('');
+
+  // Stores the results obtained from the ZIP code input
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+
+  // Stores detailed area information based on the ZIP code
   const [areaInfo, setAreaInfo] = useState({ county: '', state: '', classOne: '', classTwo: '', timeZone: '' });
   const [areaShow, setAreaShow] = useState(false);
+
+  // Stores the results of tornado alerts based on location
   const [tornadoResult, setTornadoResult] = useState(null);
   const [tornadoAlerts, setTornadoAlerts] = useState([]);
 
-  //! My steps for completing the full baseline to this project:
-  //* Step 1: gather initial baseline material. Find timezones, location info, and names.
-  // Step one finished
-  //* Step 2: Check if a tornado /alert is ACTIVE
-  // Step 2 finished
-  //* Step 3: If active, find a way to track the tornado using all the information collected in the states
+  // Stores error messages for handling errors
+  const [error, setError] = useState(null);
 
-  /*  The NOAA (National Oceanic and Atmospheric Administration) Weather API provides real-time tornado data including:
+  //! Steps to complete the tornado tracking baseline:
+  //* Step 1: Gather basic information such as timezones, location data, and names.
+  // Step 1 completed successfully
+  //* Step 2: Identify if there is an active tornado alert
+  // Step 2 completed successfully
+  //* Step 3: For active alerts, track the tornado using collected information
+
+  /*  Using the NOAA (National Oceanic and Atmospheric Administration) Weather API for real-time tornado data including:
     - Current tornado locations
     - Storm path predictions
     - Storm track coordinates
@@ -27,27 +36,36 @@ export default function TornadoTracker() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Fetch location information using Google's Geocoding API
       const { data: { results } } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
         params: { address: zipCodeInput, key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }
       });
+
+      // Extract location data
       const location = results[0]?.geometry.location;
       if (!location) throw new Error('Invalid ZIP code.');
 
       const { lat, lng } = location;
+
+      // Fetch area zone information using the latitude and longitude
       const zonesResponse = await axios.post('/api/fetch-zones', { lat, lng });
       setResult(zonesResponse.data);
 
+      // Fetch tornado alerts using the latitude and longitude
       const alertsResponse = await axios.post('/api/alerts', { lat, lng });
       setTornadoResult(alertsResponse.data);
 
-      setError(null); // Clear any existing errors
+      // Clear any existing errors
+      setError(null);
     } catch (err) {
+      // Handle any errors that occur during the fetch operations
       setError(err.response?.data?.message || err.message || 'Error fetching data');
-      setResult(null);
+      setResult(null); // Reset result on error
     }
   };
 
   useEffect(() => {
+    // Update area information when the result is available
     if (result) {
       setAreaInfo({
         county: result.features[0]?.properties?.name || null,
@@ -56,11 +74,12 @@ export default function TornadoTracker() {
         classTwo: result.features[2]?.properties?.name || null,
         timeZone: result.features[0]?.properties?.timeZone?.[0] || null,
       });
-      setAreaShow(true);
+      setAreaShow(true); // Show the area information
     }
   }, [result]);
 
   useEffect(() => {
+    // Update tornado alerts when the tornado result is available
     if (tornadoResult) {
       if (tornadoResult.alerts?.length > 0) {
         setTornadoAlerts(tornadoResult.alerts.map(alert => ({
@@ -71,11 +90,10 @@ export default function TornadoTracker() {
           status: alert?.properties?.status || null,
         })));
       } else {
-        setTornadoAlerts(null);
+        setTornadoAlerts(null); // No alerts available
       }
     }
   }, [tornadoResult]);
-
 
   return (
     <>
