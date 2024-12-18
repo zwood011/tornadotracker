@@ -66,8 +66,6 @@ export default function TornadoTracker() {
     }
   }, [tornadoResult]);
 
-  const alertHandler = () => console.log(tornadoAlerts);
-
   return (
     <>
       <Head>
@@ -90,7 +88,7 @@ export default function TornadoTracker() {
           </div>
         )}
 
-        <button onClick={alertHandler}>Show Alerts</button>
+        <button onClick={() => console.log(tornadoAlerts)}>Show Tornado Alerts</button>
 
         <form onSubmit={handleSubmit} className="main-element">
           <div>
