@@ -9,11 +9,7 @@ export default function TornadoTracker() {
   const [areaInfo, setAreaInfo] = useState({ county: '', state: '', classOne: '', classTwo: '', timeZone: '' });
   const [areaShow, setAreaShow] = useState(false);
   const [tornadoResult, setTornadoResult] = useState(null);
-  const [tornadoAlerts, setTornadoAlerts] = useState({
-    alert0: { certainty: '', headline: '', description: '', severity: '', status: '' },
-    alert1: { certainty: '', headline: '', description: '', severity: '', status: '' },
-    alert2: { certainty: '', headline: '', description: '', severity: '', status: '' }
-  });
+  const [tornadoAlerts, setTornadoAlerts] = useState([]);
 
   //! My steps for completing the full baseline to this project:
   //* Step 1: gather initial baseline material. Find timezones, location info, and names.
@@ -25,27 +21,16 @@ export default function TornadoTracker() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Step 1: Convert ZIP code to coordinates
-      const geocodingResponse = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json`,
-        {
-          params: {
-            address: zipCodeInput,
-            key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-          },
-        }
-      );
-
-      const location = geocodingResponse.data.results[0]?.geometry.location;
+      const { data: { results } } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: { address: zipCodeInput, key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }
+      });
+      const location = results[0]?.geometry.location;
       if (!location) throw new Error('Invalid ZIP code.');
 
       const { lat, lng } = location;
-
-      // Step 2: Fetch zones data
       const zonesResponse = await axios.post('/api/fetch-zones', { lat, lng });
       setResult(zonesResponse.data);
 
-      // Step 3: Fetch alerts data
       const alertsResponse = await axios.post('/api/alerts', { lat, lng });
       setTornadoResult(alertsResponse.data);
 
@@ -58,7 +43,6 @@ export default function TornadoTracker() {
 
   useEffect(() => {
     if (result) {
-      // Automatically update area info and show it
       setAreaInfo({
         county: result.features[0]?.properties?.name || null,
         state: result.features[0]?.properties?.state || null,
@@ -72,21 +56,17 @@ export default function TornadoTracker() {
 
   useEffect(() => {
     if (tornadoResult) {
-      const alerts = tornadoResult?.alerts?.map((alert) => ({
+      setTornadoAlerts(tornadoResult.alerts?.map(alert => ({
         certainty: alert?.properties?.certainty || '',
         headline: alert?.properties?.headline || '',
         description: alert?.properties?.description || '',
         severity: alert?.properties?.severity || '',
         status: alert?.properties?.status || '',
-      })) || [];
-      setTornadoAlerts(alerts);
+      })) || []);
     }
   }, [tornadoResult]);
 
-
-  const alertHandler = () => {
-    console.log(tornadoAlerts);
-  }
+  const alertHandler = () => console.log(tornadoAlerts);
 
   return (
     <>
@@ -110,9 +90,7 @@ export default function TornadoTracker() {
           </div>
         )}
 
-        {tornadoAlerts && (
-          <button onClick={alertHandler}>Show Alerts</button>
-        )}
+        <button onClick={alertHandler}>Show Alerts</button>
 
         <form onSubmit={handleSubmit} className="main-element">
           <div>
