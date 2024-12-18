@@ -26,7 +26,6 @@ export default function TornadoTracker() {
   //* Step 2: Identify if there is an active tornado alert
   // Step 2 completed successfully
   //* Step 3: For active alerts, track the tornado using collected information
-
   /*  Using the NOAA (National Oceanic and Atmospheric Administration) Weather API for real-time tornado data including:
     - Current tornado locations
     - Storm path predictions
@@ -105,9 +104,9 @@ export default function TornadoTracker() {
         <h1 className="main-element">Tracker Baseline</h1>
 
         {areaShow && (
-          <div>
+          <div className="area-container">
             <h2>Areas:</h2>
-            <ol>
+            <ol className="area-list">
               <li>{`${areaInfo.state}, ${areaInfo.county}`}</li>
               <li>{areaInfo.timeZone} Time Zone</li>
               <li>Class 1: {areaInfo.classOne}</li>
@@ -119,8 +118,8 @@ export default function TornadoTracker() {
 
         <button onClick={() => console.log(tornadoAlerts)}>Show Tornado Alerts</button>
 
-        <form onSubmit={handleSubmit} className="main-element">
-          <div>
+        <form onSubmit={handleSubmit} className="main-element form-container">
+          <div className="form-items">
             <label>Zip Code: </label>
             <input
               type="text"
