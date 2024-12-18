@@ -23,7 +23,13 @@ export default async function handler(req, res) {
       },
     });
 
-    res.status(200).json(alertsResponse.data);
+    const alerts = alertsResponse.data.features
+      .filter(feature =>
+        feature.properties.event === "Tornado Warning" ||
+        feature.properties.event === "Tornado Watch"
+      );
+
+    res.status(200).json({ alerts });
   } catch (error) {
     res
       .status(error.response?.status || 500)
