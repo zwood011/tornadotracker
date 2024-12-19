@@ -100,24 +100,8 @@ export default function TornadoTracker() {
         <title>Tornado Tracker</title>
       </Head>
 
-      <div>
+      <div className="page-container">
         <h1 className="main-element">Tracker Baseline</h1>
-
-        {areaShow && (
-          <div className="area-container">
-            <h2>Areas:</h2>
-            <ol className="area-list">
-              <li>{`${areaInfo.state}, ${areaInfo.county}`}</li>
-              <li>{areaInfo.timeZone} Time Zone</li>
-              <li>Class 1: {areaInfo.classOne}</li>
-              <li>Class 2: {areaInfo.classTwo}</li>
-            </ol>
-            <p>(Classes vary by region. If there is <em>no specific classification</em> labeled within the region, they will be marked as the <strong>original county</strong> by default)</p>
-          </div>
-        )}
-
-        <button onClick={() => console.log(tornadoAlerts)}>Show Tornado Alerts</button>
-
         <form onSubmit={handleSubmit} className="main-element form-container">
           <div className="form-items">
             <label>Zip Code: </label>
@@ -132,11 +116,36 @@ export default function TornadoTracker() {
           <button type="submit">Fetch Area Info</button>
         </form>
 
-        {result && (
-          <div className="main-element">
-            <pre>{JSON.stringify(result, null, 2)}</pre>
+        {areaShow && (
+          <div className="area-container">
+            <ol className="area-list main-element">
+              <strong className="main-element">
+                <li className="main-element">{`${areaInfo.state}, ${areaInfo.county}`}</li>
+                <li className="main-element">{areaInfo.timeZone} Time Zone</li>
+                <li className="main-element">Area Class: {areaInfo.classOne}</li>
+                <li className="main-element">Area Class: {areaInfo.classTwo}</li>
+              </strong>
+            </ol>
+            <p className="main-element">If there is no specific classification, the classes will be marked as the county name by default</p>
           </div>
         )}
+
+        {tornadoAlerts && (
+          <div className="alerts-container main-element">
+            <ul className="alerts-list">
+              {tornadoAlerts.map((alert, index) => (
+                <li key={index}>
+                  <h3 className="main-element">{alert.headline}</h3>
+                  <p className="main-element">{alert.description}</p>
+                  <p className="main-element">Severity: {alert.severity}</p>
+                  <p className="main-element">Status: {alert.status}</p>
+                  <p className="main-element">Certainty: {alert.certainty}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
 
         {error && <div style={{ color: 'red' }}>{error}</div>}
       </div>
