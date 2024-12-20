@@ -19,18 +19,17 @@ export default function TornadoTracker() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Fetch location information using Google's Geocoding API
+      // Find lat/lng w/ Google's Geocoding API
       const { data: { results } } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
         params: { address: zipCodeInput, key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }
       });
 
-      // Extract location data
+      // Extract
       const location = results[0]?.geometry.location;
       if (!location) throw new Error('Invalid ZIP code.');
+      const { lat, lng } = location; // Assign
 
-      const { lat, lng } = location;
-
-      // Fetch area zone information using the latitude and longitude
+      // Fetch weather.api info using assigned lat/lng as the required parameters
       const zonesResponse = await axios.post('/api/fetch-zones', { lat, lng });
       setResult(zonesResponse.data);
 
@@ -38,12 +37,11 @@ export default function TornadoTracker() {
       const alertsResponse = await axios.post('/api/alerts', { lat, lng });
       setTornadoResult(alertsResponse.data);
 
-      // Clear any existing errors
+      // Clear
       setError(null);
     } catch (err) {
-      // Handle any errors that occur during the fetch operations
       setError(err.response?.data?.message || err.message || 'Error fetching data');
-      setResult(null); // Reset result on error
+      setResult(null);
     }
   };
 
@@ -76,15 +74,11 @@ export default function TornadoTracker() {
         </header>
 
         {result && (
-          <>
-            <Areas result={result} />
-          </>
+          <Areas result={result} />
         )}
 
         {tornadoResult && (
-          <>
-            <Alerts result={tornadoResult} />
-          </>
+          <Alerts result={tornadoResult} />
         )}
 
         {error && <div style={{ color: 'red' }}>{error}</div>}
