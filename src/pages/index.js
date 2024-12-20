@@ -11,19 +11,21 @@ export default function TornadoTracker() {
   const [tornadoResult, setTornadoResult] = useState(null);
   const [error, setError] = useState(null);
 
-  /*  Try using the NOAA (National Oceanic and Atmospheric Administration) Weather API for real-time tornado data including:
-    - Current tornado locations
-    - Storm path predictions
-    - Storm track coordinates
-*/
+  /*  
+  ? Try using the NOAA (National Oceanic and Atmospheric Administration) Weather API for real-time tornado data including:
+      - Current tornado locations
+      - Storm path predictions
+      - Storm track coordinates
+  */
 
   //! This project's data flow is currently bidirectional between this file and header.js, though not complex
   //* SSR/ISR & Redux will be implemented once I have all of the logic in place
 
-  const handleZipCodeChange = (zipCode) => {
+  const handleZipCode = (zipCode) => { // Sync changes from header.js to this file
     setZipCode(zipCode);
   };
 
+  // Lifted up from header.js to handle the conditional rendering + api calls found in this file
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -37,17 +39,15 @@ export default function TornadoTracker() {
       if (!location) throw new Error('Invalid ZIP code.');
       const { lat, lng } = location; // Assign
 
-      // Fetch zone info using the assigned lat/lng 
+      // Fetch zone data using the assigned lat/lng 
       const zonesResponse = await axios.post('/api/fetch-zones', { lat, lng });
       setResult(zonesResponse.data);
 
-      // Fetch alert info using the assigned lat/lng
+      // Fetch alert data using the assigned lat/lng
       const alertsResponse = await axios.post('/api/alerts', { lat, lng });
       setTornadoResult(alertsResponse.data);
-
-      // Clear
-      setError(null);
     } catch (err) {
+      // Handle errors
       setError(err.response?.data?.message || err.message || 'Error fetching data');
       setResult(null);
     }
@@ -61,7 +61,7 @@ export default function TornadoTracker() {
       </Head>
 
       <div className="page-container">
-        <Header handleSubmit={handleSubmit} handleZipCodeChange={handleZipCodeChange} zipCode={zipCode} />
+        <Header handleSubmit={handleSubmit} handleZipCode={handleZipCode} zipCode={zipCode} />
 
         {result && (
           <main>

@@ -1,7 +1,7 @@
-const Header = ({ handleSubmit, handleZipCodeChange, zipCode }) => {
-
+const Header = ({ handleSubmit, handleZipCode, zipCode }) => {
+    // See comments in Index.js
     const handleChange = (e) => {
-        handleZipCodeChange(e.target.value);
+        handleZipCode(e.target.value);
     };
 
     return (
