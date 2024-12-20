@@ -17,6 +17,9 @@ export default function TornadoTracker() {
     - Storm track coordinates
 */
 
+  //! This project's data flow is currently bidirectional between this file and header.js, though not complex
+  //* SSR/ISR & Redux will be implemented once I have all of the logic in place
+
   const handleZipCodeChange = (zipCode) => {
     setZipCode(zipCode);
   };
