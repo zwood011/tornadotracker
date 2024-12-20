@@ -35,7 +35,11 @@ a {
   text-decoration: none;
 }
 
-.main-element{
+ul {
+  list-style-type: none;
+}
+
+.main-element {
   margin: .2rem;
   padding: .5rem;
   display: flex;
