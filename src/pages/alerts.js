@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
-const Alerts = ({result}) => {
+const Alerts = ({ result }) => {
     const [tornadoAlerts, setTornadoAlerts] = useState([]);
-    
+
     useEffect(() => {
         // Update tornado alerts when the tornado result is available
         if (result) {
-          if (result.alerts?.length > 0) {
-            setTornadoAlerts(result.alerts.map(alert => ({
-              certainty: alert?.properties?.certainty || null,
-              headline: alert?.properties?.headline || null,
-              description: alert?.properties?.description || null,
-              severity: alert?.properties?.severity || null,
-              status: alert?.properties?.status || null,
-            })));
-          } else {
-            setTornadoAlerts(null); // No alerts available
-          }
+            if (result.alerts?.length > 0) {
+                setTornadoAlerts(result.alerts.map(alert => ({
+                    certainty: alert?.properties?.certainty || null,
+                    headline: alert?.properties?.headline || null,
+                    description: alert?.properties?.description || null,
+                    severity: alert?.properties?.severity || null,
+                    status: alert?.properties?.status || null,
+                })));
+            } else {
+                setTornadoAlerts(null); // No alerts available
+            }
         }
-      }, [result]);
+    }, [result]);
 
     return (
         <>

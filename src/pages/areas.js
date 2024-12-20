@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const Areas = ({ result }) => {
     const [areaInfo, setAreaInfo] = useState({ county: '', state: '', classOne: '', classTwo: '', timeZone: '' });
-    
+
     useEffect(() => {
         // Update area information when the result is available
         if (result) {
