@@ -97,7 +97,7 @@ export default function TornadoTracker() {
   return (
     <>
       <Head>
-        <title>Tornado Tracker</title>
+        <title>Tracker</title>
       </Head>
 
       <div className="page-container">
@@ -116,36 +116,37 @@ export default function TornadoTracker() {
           <button type="submit">Fetch Area Info</button>
         </form>
 
-        {areaShow && (
-          <div className="area-container">
-            <ol className="area-list main-element">
-              <strong className="main-element">
-                <li className="main-element">{`${areaInfo.state}, ${areaInfo.county}`}</li>
-                <li className="main-element">{areaInfo.timeZone} Time Zone</li>
-                <li className="main-element">Area Class: {areaInfo.classOne}</li>
-                <li className="main-element">Area Class: {areaInfo.classTwo}</li>
-              </strong>
-            </ol>
-            <p className="main-element">If there is no specific classification, the classes will be marked as the county name by default</p>
-          </div>
-        )}
+        <div className="recent-alerts">
+          {areaShow && (
+            <div className="area-container">
+              <ol className="area-list main-element">
+                <strong className="main-element">
+                  <li className="main-element">{`${areaInfo.state}, ${areaInfo.county}`}</li>
+                  <li className="main-element">{areaInfo.timeZone} Time Zone</li>
+                  <li className="main-element">Area Class: {areaInfo.classOne}</li>
+                  <li className="main-element">Area Class: {areaInfo.classTwo}</li>
+                </strong>
+              </ol>
+              <p className="main-element">If there is no specific classification, the classes will be marked as the county name by default</p>
+            </div>
+          )}
 
-        {tornadoAlerts && (
-          <div className="alerts-container main-element">
-            <ul className="alerts-list">
-              {tornadoAlerts.map((alert, index) => (
-                <li key={index}>
-                  <h3 className="main-element">{alert.headline}</h3>
-                  <p className="main-element">{alert.description}</p>
-                  <p className="main-element">Severity: {alert.severity}</p>
-                  <p className="main-element">Status: {alert.status}</p>
-                  <p className="main-element">Certainty: {alert.certainty}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
+          {tornadoAlerts && (
+            <div className="alerts-container main-element">
+              <ul className="alerts-list">
+                {tornadoAlerts.map((alert, index) => (
+                  <li key={index}>
+                    <h3 className="main-element">{alert.headline}</h3>
+                    <p className="main-element">{alert.description}</p>
+                    <p className="main-element">Severity: {alert.severity}</p>
+                    <p className="main-element">Status: {alert.status}</p>
+                    <p className="main-element">Certainty: {alert.certainty}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
 
         {error && <div style={{ color: 'red' }}>{error}</div>}
       </div>
