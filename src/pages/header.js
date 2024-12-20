@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Header = ({ handleSubmit, handleZipCodeChange, zipCode }) => {
 
     const handleChange = (e) => {
@@ -20,8 +18,7 @@ const Header = ({ handleSubmit, handleZipCodeChange, zipCode }) => {
                         type="text"
                         value={zipCode}
                         onChange={handleChange}
-                        required
-                    />
+                        required />
                 </div>
                 <button type="submit">Fetch Area Info</button>
             </form>
