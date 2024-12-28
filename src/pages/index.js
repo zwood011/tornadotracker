@@ -40,9 +40,13 @@ export default function TornadoTracker() {
       // Fetch alert data using the assigned lat/lng
       const alertsResponse = await axios.post('/api/alerts', { lat, lng });
       setTornadoResult(alertsResponse.data);
+
+      setError(null);
     } catch (err) {
-      // Handle errors
-      setError(err.response?.data?.message || err.message || 'Error fetching data');
+      if (err.status === 400) { setError('Invalid ZIP code.') }
+      else {
+        setError(err.message || 'Error fetching data');
+      }
       setResult(null);
     }
   };
@@ -63,7 +67,7 @@ export default function TornadoTracker() {
           </main>
         )}
 
-        {error && <div style={{ color: 'red' }}>{error}</div>}
+        {error && <div className="main-element" style={{ color: 'red' }}><strong>{error}</strong></div>}
       </div>
     </>
   );
