@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import axios from 'axios';
+
 import Areas from './areas';
 import Alerts from './alerts';
 import Header from './header';
@@ -10,13 +11,6 @@ export default function TornadoTracker() {
   const [result, setResult] = useState(null);
   const [tornadoResult, setTornadoResult] = useState(null);
   const [error, setError] = useState(null);
-
-  /*  
-  ? Try using the NOAA (National Oceanic and Atmospheric Administration) Weather API for real-time tornado data including:
-      - Current tornado locations
-      - Storm path predictions
-      - Storm track coordinates
-  */
 
   //! This project's data flow is currently bidirectional between this file and header.js, though not complex
   //* SSR/ISR & Redux will be implemented once I have all of the logic in place
@@ -53,7 +47,6 @@ export default function TornadoTracker() {
     }
   };
 
-
   return (
     <>
       <Head>
@@ -64,12 +57,9 @@ export default function TornadoTracker() {
         <Header handleSubmit={handleSubmit} handleZipCode={handleZipCode} zipCode={zipCode} />
 
         {result && (
-          <main>
+          <main className="main-container">
             <Areas result={result} />
-
-            {tornadoResult && (
-              <Alerts result={tornadoResult} />
-            )}
+            {tornadoResult && (<Alerts result={tornadoResult} />)}
           </main>
         )}
 
