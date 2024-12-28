@@ -1,7 +1,7 @@
 const Header = ({ handleSubmit, handleZipCode, zipCode }) => {
-    // See comments in Index.js
     const handleChange = (e) => {
-        handleZipCode(e.target.value);
+        const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
+        handleZipCode(sanitizedValue);
     };
 
     return (
@@ -15,7 +15,7 @@ const Header = ({ handleSubmit, handleZipCode, zipCode }) => {
                 <div className="form-items">
                     <label>Zip Code: </label>
                     <input
-                        type="text"
+                        type="tel"
                         value={zipCode}
                         onChange={handleChange}
                         required />
