@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Head from 'next/head';
 import axios from 'axios';
 
-import Areas from './areas';
-import Alerts from './alerts';
-import Header from './header';
+import Areas from '../components/areas';
+import Alerts from '../components/alerts';
+import Header from '../components/header';
 
 export default function TornadoTracker() {
   const [zipCode, setZipCode] = useState('');
@@ -12,32 +12,24 @@ export default function TornadoTracker() {
   const [tornadoResult, setTornadoResult] = useState(null);
   const [error, setError] = useState(null);
 
-  //! This project's data flow is currently bidirectional between this file and header.js, though not complex
-  //* SSR/ISR & Redux will be implemented once I have all of the logic in place
-
-  const handleZipCode = (zipCode) => { // Sync changes from header.js to this file
+  const handleZipCode = (zipCode) => {
     setZipCode(zipCode);
   };
 
-  // Lifted up from header.js to handle the conditional rendering + api calls found in this file
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Find lat/lng w/ Google's Geocoding API
       const { data: { results } } = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
         params: { address: zipCode, key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }
       });
 
-      // Extract
       const location = results[0]?.geometry.location;
       if (!location) throw new Error('Invalid ZIP code.');
-      const { lat, lng } = location; // Assign
+      const { lat, lng } = location;
 
-      // Fetch zone data using the assigned lat/lng 
       const zonesResponse = await axios.post('/api/fetch-zones', { lat, lng });
       setResult(zonesResponse.data);
 
-      // Fetch alert data using the assigned lat/lng
       const alertsResponse = await axios.post('/api/alerts', { lat, lng });
       setTornadoResult(alertsResponse.data);
 
@@ -48,6 +40,7 @@ export default function TornadoTracker() {
         setError(err.message || 'Error fetching data');
       }
       setResult(null);
+      setTornadoResult(null);
     }
   };
 
@@ -63,7 +56,7 @@ export default function TornadoTracker() {
         {result && (
           <main className="main-container">
             <Areas result={result} />
-            {tornadoResult && (<Alerts result={tornadoResult} />)}
+            {tornadoResult && <Alerts result={tornadoResult} />}
           </main>
         )}
 
