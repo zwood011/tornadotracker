@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/HooksGuide.md
 
 # next.js
 /.next/
