@@ -21,7 +21,7 @@ const Areas = ({ result }) => {
             <ol className="area-list main-element">
                 <strong className="main-element">
                     <li className="main-element">{`${areaInfo.state}, ${areaInfo.county}`}</li>
-                    <li className="main-element">{areaInfo.timeZone} Time Zone</li>
+                    <li className="main-element">{areaInfo.timeZone} Time</li>
                     <li className="main-element">Area Class: {areaInfo.classOne}</li>
                     <li className="main-element">Area Class: {areaInfo.classTwo}</li>
                 </strong>
