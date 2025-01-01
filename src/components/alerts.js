@@ -31,11 +31,10 @@ const Alerts = ({ result }) => {
                     <div className="alerts-info">
                         <ul className="alerts-list">
                             {tornadoAlerts.map((alert, index) => (
-                                <li className="p-3 m-3 border" key={index}>
+                                <li className="p-3 m-3 border d-flex flex-column w-50" key={index}>
                                     <h3>{alert.headline}</h3>
                                     <p>{alert.description}</p>
                                     <p>Severity: {alert.severity}</p>
-                                    <p>Status: {alert.status}</p>
                                     <p>Certainty: {alert.certainty}</p>
                                 </li>
                             ))}
