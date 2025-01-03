@@ -1,3 +1,5 @@
+import Button from './button';
+
 const Header = ({ handleSubmit, handleZipCode, zipCode }) => {
     const handleChange = (e) => {
         const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
@@ -21,7 +23,7 @@ const Header = ({ handleSubmit, handleZipCode, zipCode }) => {
                         onChange={handleChange}
                         required />
                 </div>
-                <button type="submit" className="btn btn-primary form-button">Search</button>
+                <Button text="Search" onClick={handleSubmit} />
             </form>
         </header>
     );
