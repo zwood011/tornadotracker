@@ -42,6 +42,7 @@ export default function TornadoTracker() {
       setResult(null);
       setTornadoResult(null);
     }
+    setZipCode('');
   };
 
   return (
