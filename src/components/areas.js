@@ -22,11 +22,14 @@ const Areas = ({ result }) => {
                 <strong className="main-element">
                     <li className="main-element">{`${areaInfo.state}, ${areaInfo.county}`}</li>
                     <li className="main-element">{areaInfo.timeZone} Time</li>
-                    <li className="main-element">Area Class: {areaInfo.classOne}</li>
-                    <li className="main-element">Area Class: {areaInfo.classTwo}</li>
+                    {areaInfo.classOne !== areaInfo.classTwo && (
+                        <>
+                            <li className="main-element">Class One: {areaInfo.classOne}</li>
+                            <li className="main-element">Class Two: {areaInfo.classTwo}</li>
+                        </>
+                    )}
                 </strong>
             </ol>
-            <p className="main-element">If there is no specific classification, the classes will be marked as the county name by default</p>
         </div>
     );
 };
